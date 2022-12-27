@@ -78,200 +78,73 @@ public class Main {
                 System.out.printf("Error! Wrong length of %s! Try Again:\n", name);
                 System.out.print('\n');
             } else {
-                boolean invalidCoord = false;
-                if (startY == endY) {
-                    for (int i = 0; i < shipLength; i++) {
-                        if (field[startY][startX + i] == 'O') {
-                            System.out.println("Error! Overlapping placement! Try Again!");
-                            System.out.print('\n');
-                            invalidCoord = true;
+                for (int i = startY; i <= endY; i++) {
+                    for (int j = startX; j <= endX; j++) {
+                        validInput = validCoordinate(i, j);
+                        if (!validInput) {
                             break;
-                        } else {
-                            if (startY > 0 && startY < 9 && startX + i > 0 && startX + i < 9) {
-                                if (field[startY][startX + i + 1] == 'O' || field[startY][startX + i - 1] == 'O'  ||
-                                        field[startY + 1][startX + i + 1] == 'O' || field[startY - 1][startX + i + 1] == 'O'
-                                        || field[startY + 1][startX + i - 1] == 'O' || field[startY - 1][startX + i - 1] == 'O'
-                                        || field[startY + 1][startX + i] == 'O' || field[startY - 1][startX + i] == 'O') {
-                                    System.out.println("Error! Ship placed too close to another ship!");
-                                    System.out.print('\n');
-                                    invalidCoord = true;
-                                    break;
-                                }
-                            } else if (startY == 0 && startX + i == 0) {
-                                if (field[startY][startX + i + 1] == 'O' || field[startY + 1][startX + i + 1] == 'O'
-                                        || field[startY + 1][startX + i] == 'O') {
-                                    System.out.println("Error! Ship placed too close to another ship!");
-                                    System.out.print('\n');
-                                    invalidCoord = true;
-                                    break;
-                                }
-                            } else if (startY == 0 && startX + i == 9) {
-                                if (field[startY][startX + i - 1] == 'O'  || field[startY + 1][startX + i - 1] == 'O'
-                                        || field[startY + 1][startX + i] == 'O') {
-                                    System.out.println("Error! Ship placed too close to another ship!");
-                                    System.out.print('\n');
-                                    invalidCoord = true;
-                                    break;
-                                }
-                            } else if (startY == 9 && startX + i == 0) {
-                                if (field[startY][startX + i + 1] == 'O' || field[startY - 1][startX + i + 1] == 'O'
-                                        || field[startY - 1][startX + i] == 'O') {
-                                    System.out.println("Error! Ship placed too close to another ship!");
-                                    System.out.print('\n');
-                                    invalidCoord = true;
-                                    break;
-                                }
-                            } else if (startY == 9 && startX + i == 9) {
-                                if (field[startY][startX + i - 1] == 'O'  || field[startY - 1][startX + i - 1] == 'O'
-                                        || field[startY - 1][startX + i] == 'O') {
-                                    System.out.println("Error! Ship placed too close to another ship!");
-                                    System.out.print('\n');
-                                    invalidCoord = true;
-                                    break;
-                                }
-                            } else if (startY == 0) {
-                                if (field[startY][startX + i + 1] == 'O' || field[startY][startX + i - 1] == 'O'  ||
-                                        field[startY + 1][startX + i + 1] == 'O' || field[startY + 1][startX + i - 1] == 'O'
-                                        || field[startY + 1][startX + i] == 'O') {
-                                    System.out.println("Error! Ship placed too close to another ship!");
-                                    System.out.print('\n');
-                                    invalidCoord = true;
-                                    break;
-                                }
-                            } else if (startY == 9) {
-                                if (field[startY][startX + i + 1] == 'O' || field[startY][startX + i - 1] == 'O'  ||
-                                        field[startY - 1][startX + i + 1] == 'O'|| field[startY - 1][startX + i - 1] == 'O'
-                                        || field[startY - 1][startX + i] == 'O') {
-                                    System.out.println("Error! Ship placed too close to another ship!");
-                                    System.out.print('\n');
-                                    invalidCoord = true;
-                                    break;
-                                }
-                            } else if (startX + i == 0) {
-                                if (field[startY][startX + i + 1] == 'O' || field[startY + 1][startX + i + 1] == 'O' ||
-                                        field[startY - 1][startX + i + 1] == 'O' || field[startY + 1][startX + i] == 'O'
-                                        || field[startY - 1][startX + i] == 'O') {
-                                    System.out.println("Error! Ship placed too close to another ship!");
-                                    System.out.print('\n');
-                                    invalidCoord = true;
-                                    break;
-                                }
-                            } else if (startX + i == 9) {
-                                if (field[startY][startX + i - 1] == 'O'  || field[startY + 1][startX + i - 1] == 'O' ||
-                                        field[startY - 1][startX + i - 1] == 'O' || field[startY + 1][startX + i] == 'O'
-                                        || field[startY - 1][startX + i] == 'O') {
-                                    System.out.println("Error! Ship placed too close to another ship!");
-                                    System.out.print('\n');
-                                    invalidCoord = true;
-                                    break;
-                                }
-                            }
                         }
                     }
-                    if (!invalidCoord) {
-                        for (int j = 0; j < shipLength; j++) {
-                            field[startY][startX + j] = 'O';
-                        }
-                        validInput = true;
+                    if (!validInput) {
+                        System.out.println("Error! Ship overlapping or too close to another ship!");
+                        System.out.print('\n');
+                        break;
                     }
-                } else {
-                    for (int i = 0; i < shipLength; i++) {
-                        if (field[startY + i][startX] == 'O') {
-                            System.out.println("Error! Overlapping placement! Try Again!");
-                            System.out.print('\n');
-                            invalidCoord = true;
-                            break;
-                        } else {
-                            if (startY + i > 0 && startY + i < 9 && startX > 0 && startX < 9) {
-                                if (field[startY + i + 1][startX] == 'O' || field[startY + i - 1][startX] == 'O' ||
-                                        field[startY + i + 1][startX + 1] == 'O' || field[startY + i - 1][startX + 1] == 'O'
-                                        || field[startY + i + 1][startX - 1] == 'O' || field[startY + i - 1][startX - 1] == 'O'
-                                        || field[startY + i][startX + 1] == 'O' || field[startY + i][startX - 1] == 'O') {
-                                    System.out.println("Error! Ship placed too close to another ship!");
-                                    System.out.print('\n');
-                                    invalidCoord = true;
-                                    break;
-                                }
-                            } else if (startY + i == 0 && startX == 0) {
-                                if (field[startY + i + 1][startX] == 'O' || field[startY + i + 1][startX + 1] == 'O' ||
-                                        field[startY + i][startX + 1] == 'O') {
-                                    System.out.println("Error! Ship placed too close to another ship!");
-                                    System.out.print('\n');
-                                    invalidCoord = true;
-                                    break;
-                                }
-                            } else if (startY + i == 0 && startX == 9) {
-                                if (field[startY + i + 1][startX] == 'O' || field[startY + i + 1][startX - 1] == 'O' ||
-                                        field[startY + i][startX - 1] == 'O') {
-                                    System.out.println("Error! Ship placed too close to another ship!");
-                                    System.out.print('\n');
-                                    invalidCoord = true;
-                                    break;
-                                }
-                            } else if (startY + i == 9 && startX == 9) {
-                                if (field[startY + i - 1][startX] == 'O' || field[startY + i - 1][startX - 1] == 'O'
-                                        || field[startY + i][startX - 1] == 'O') {
-                                    System.out.println("Error! Ship placed too close to another ship!");
-                                    System.out.print('\n');
-                                    invalidCoord = true;
-                                    break;
-                                }
-                            } else if (startY + i == 9 && startX == 0) {
-                                if (field[startY + i - 1][startX] == 'O' || field[startY + i - 1][startX + 1] == 'O'||
-                                        field[startY + i][startX + 1] == 'O') {
-                                    System.out.println("Error! Ship placed too close to another ship!");
-                                    System.out.print('\n');
-                                    invalidCoord = true;
-                                    break;
-                                }
-                            } else if (startY + i == 0) {
-                                if (field[startY + i + 1][startX] == 'O' || field[startY + i + 1][startX + 1] == 'O' ||
-                                        field[startY + i + 1][startX - 1] == 'O' || field[startY + i][startX + 1] == 'O'
-                                        || field[startY + i][startX - 1] == 'O') {
-                                    System.out.println("Error! Ship placed too close to another ship!");
-                                    System.out.print('\n');
-                                    invalidCoord = true;
-                                    break;
-                                }
-                            } else if (startY + i == 9) {
-                                if (field[startY + i - 1][startX] == 'O' || field[startY + i - 1][startX + 1] == 'O'
-                                        || field[startY + i - 1][startX - 1] == 'O' || field[startY + i][startX + 1] == 'O'
-                                        || field[startY + i][startX - 1] == 'O') {
-                                    System.out.println("Error! Ship placed too close to another ship!");
-                                    System.out.print('\n');
-                                    invalidCoord = true;
-                                    break;
-                                }
-                            } else if (startX == 0) {
-                                if (field[startY + i + 1][startX] == 'O' || field[startY + i - 1][startX] == 'O' ||
-                                        field[startY + i + 1][startX + 1] == 'O' || field[startY + i - 1][startX + 1] == 'O'
-                                        || field[startY + i][startX + 1] == 'O') {
-                                    System.out.println("Error! Ship placed too close to another ship!");
-                                    System.out.print('\n');
-                                    invalidCoord = true;
-                                    break;
-                                }
-                            } else if (startX == 9) {
-                                if (field[startY + i + 1][startX] == 'O' || field[startY + i - 1][startX] == 'O' ||
-                                        field[startY + i + 1][startX - 1] == 'O' || field[startY + i - 1][startX - 1] == 'O'
-                                        || field[startY + i][startX - 1] == 'O') {
-                                    System.out.println("Error! Ship placed too close to another ship!");
-                                    System.out.print('\n');
-                                    invalidCoord = true;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                    if (!invalidCoord) {
-                        for (int j = 0; j < shipLength; j++) {
-                            field[startY + j][startX] = 'O';
-                        }
-                        validInput = true;
+                }
+            }
+            if (validInput) {
+                for (int i = startY; i <= endY; i++) {
+                    for (int j = startX; j <= endX; j++) {
+                        field[i][j] = 'O';
                     }
                 }
             }
         }
+    }
+
+    public static boolean validCoordinate(int y, int x) {
+        if (field[y][x] == 'O') {
+            return false;
+        }
+        if (y > 0) {
+            if (field[y - 1][x] == 'O') {
+                return false;
+            }
+            if (x > 0) {
+                if (field[y][x - 1] == 'O') {
+                    return false;
+                } else if (field[y - 1][x - 1] == 'O') {
+                    return false;
+                }
+            }
+            if (x < 9) {
+                if (field[y][x + 1] == 'O') {
+                    return false;
+                } else if (field[y - 1][x + 1] == 'O') {
+                    return false;
+                }
+            }
+        }
+        if (y < 9) {
+            if (field[y + 1][x] == 'O') {
+                return false;
+            }
+            if (x > 0) {
+                if (field[y][x - 1] == 'O') {
+                    return false;
+                } else if (field[y + 1][x - 1] == 'O') {
+                    return false;
+                }
+            }
+            if (x < 9) {
+                if (field[y][x + 1] == 'O') {
+                    return false;
+                } else if (field[y + 1][x + 1] == 'O') {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     public static void main(String[] args) {
@@ -280,5 +153,6 @@ public class Main {
         printField();
         System.out.print('\n');
         enterShips();
+        System.out.println("The game starts!");
     }
 }
