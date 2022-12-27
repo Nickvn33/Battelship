@@ -147,6 +147,38 @@ public class Main {
         return true;
     }
 
+    public static void takeShot() {
+        boolean validInput = false;
+        System.out.println("Take a shot!");
+        System.out.print('\n');
+
+        while (!validInput) {
+            String shot = scanner.next();
+            System.out.print('\n');
+            String[] shotCoords = shot.split("(?<=.)", 2);
+            int shotY = shotCoords[0].charAt(0) - 65;
+            int shotX = Integer.parseInt(shotCoords[1]) - 1;
+
+            if (Math.max(0, shotY) != Math.min(shotY, 9) || Math.max(0, shotX) != Math.min(shotX, 9)) {
+                System.out.println("Error! Shot out of range of playing area!");
+                System.out.print('\n');
+            } else {
+                if (field[shotY][shotX] == 'O') {
+                    field[shotY][shotX] = 'X';
+                    printField();
+                    System.out.print('\n');
+                    System.out.println("You hit a ship!");
+                } else {
+                    field[shotY][shotX] = 'M';
+                    printField();
+                    System.out.print('\n');
+                    System.out.println("You missed!");
+                }
+                validInput = true;
+            }
+        }
+    }
+
     public static void main(String[] args) {
         // Write your code here
         initialise();
@@ -154,5 +186,9 @@ public class Main {
         System.out.print('\n');
         enterShips();
         System.out.println("The game starts!");
+        System.out.print('\n');
+        printField();
+        System.out.print('\n');
+        takeShot();
     }
 }
