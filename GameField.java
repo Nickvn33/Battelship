@@ -6,6 +6,7 @@ public class GameField {
 
     public static char[][] field;
     static Scanner scanner = new Scanner(System.in);
+    public static int shipsRemaining;
 
     public GameField() {
         field = new char[10][10];
@@ -31,6 +32,7 @@ public class GameField {
     public static void enterShips() {
         for (Ships ship : Ships.values()) {
             enterShip(ship);
+            shipsRemaining++;
             printField();
             System.out.print('\n');
         }
@@ -84,9 +86,12 @@ public class GameField {
                 }
             }
             if (validInput) {
+                int index = 0;
                 for (int i = startY; i <= endY; i++) {
                     for (int j = startX; j <= endX; j++) {
                         field[i][j] = 'O';
+                        ship.setCoords(index, (i * 10 + j));
+                        index++;
                     }
                 }
             }
@@ -139,37 +144,67 @@ public class GameField {
     }
 
     public static void takeShot() {
-        boolean validInput = false;
+        System.out.print('\n');
         System.out.println("Take a shot!");
         System.out.print('\n');
 
-        while (!validInput) {
-            String shot = scanner.next();
-            System.out.print('\n');
-            String[] shotCoords = shot.split("(?<=.)", 2);
-            int shotY = shotCoords[0].charAt(0) - 65;
-            int shotX = Integer.parseInt(shotCoords[1]) - 1;
+        while (shipsRemaining > 0) {
+            boolean validInput = false;
 
-            if (Math.max(0, shotY) != Math.min(shotY, 9) || Math.max(0, shotX) != Math.min(shotX, 9)) {
-                System.out.println("Error! Shot out of range of playing area!");
+            while (!validInput) {
+                String shot = scanner.next();
                 System.out.print('\n');
-            } else {
-                if (field[shotY][shotX] == 'O') {
-                    field[shotY][shotX] = 'X';
-                    TargetField.targetField[shotY][shotX] = 'X';
-                    TargetField.printTargetField();
-                    System.out.print('\n');
-                    System.out.println("You hit a ship!");
-                    System.out.print('\n');
-                    printField();
+                String[] shotCoords = shot.split("(?<=.)", 2);
+                int shotY = shotCoords[0].charAt(0) - 65;
+                int shotX = Integer.parseInt(shotCoords[1]) - 1;
+                boolean shipSunk = false;
+                int shotCoordsNum = shotY * 10 + shotX;
+
+                if (Math.max(0, shotY) != Math.min(shotY, 9) || Math.max(0, shotX) != Math.min(shotX, 9)) {
+                    System.out.println("Error! Shot out of range of playing area!");
                 } else {
-                    field[shotY][shotX] = 'M';
-                    TargetField.targetField[shotY][shotX] = 'M';
-                    TargetField.printTargetField();
-                    System.out.print('\n');
-                    System.out.println("You missed!");
-                    System.out.print('\n');
-                    printField();
+                    if (field[shotY][shotX] == '~' || field[shotY][shotX] == 'M') {
+                        field[shotY][shotX] = 'M';
+                        TargetField.targetField[shotY][shotX] = 'M';
+                        TargetField.printTargetField();
+                        System.out.print('\n');
+                        System.out.println("You missed! Take another shot!");
+                        System.out.print('\n');
+                    } else if (field[shotY][shotX] == 'X') {
+                        TargetField.printTargetField();
+                        System.out.print('\n');
+                        System.out.println("You hit a ship! Take another shot!");
+                        System.out.print('\n');
+                    } else {
+                        field[shotY][shotX] = 'X';
+                        TargetField.targetField[shotY][shotX] = 'X';
+                        TargetField.printTargetField();
+
+                        for (Ships ship : Ships.values()) {
+                            for (int i = 0; i < ship.coords.length; i++) {
+                                if (shotCoordsNum == ship.coords[i]) {
+                                    shipSunk = ship.shipHit();
+                                }
+                            }
+                        }
+
+                        if (shipSunk) {
+                            shipsRemaining--;
+                            if (shipsRemaining == 0) {
+                                System.out.print('\n');
+                                System.out.println("You sank the last ship! Congratulations!");
+                                System.out.print('\n');
+                            } else {
+                                System.out.print('\n');
+                                System.out.println("You sank a ship! Take another shot!");
+                                System.out.print('\n');
+                            }
+                        } else {
+                            System.out.print('\n');
+                            System.out.println("You hit a ship! Take another shot!");
+                            System.out.print('\n');
+                        }
+                    }
                 }
                 validInput = true;
             }

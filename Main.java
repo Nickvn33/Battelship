@@ -9,7 +9,6 @@ public class Main {
         GameField.enterShips();
         System.out.print('\n');
         TargetField targetField = new TargetField();
-        System.out.print('\n');
         GameField.takeShot();
     }
 }
