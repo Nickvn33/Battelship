@@ -1,3 +1,9 @@
+/**
+* 
+* File is now redundant as of Update #5
+*
+*/
+
 package battleship;
 
 public enum Ships {
